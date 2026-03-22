@@ -1,3 +1,4 @@
+import { mongo } from "mongoose";
 import Product from "../models/product.model.js";
 
 // GET all products
@@ -49,6 +50,13 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
+    if(!mongos.Types.ObjectId.isValid(id)){
+        return res.status(400).json({
+            success: false,
+            message: "Invalid product ID"
+        });
+    }
+    
 
     try {
         const updatedProduct = await Product.findByIdAndUpdate(
@@ -80,6 +88,12 @@ export const updateProduct = async (req, res) => {
 // DELETE product
 export const deleteProduct = async (req, res) => {
     const { id } = req.params;
+    if(!mongos.Types.ObjectId.isValid(id)){
+        return res.status(400).json({
+            success: false,
+            message: "Invalid product ID"
+        });
+    }
 
     try {
         const deletedProduct = await Product.findByIdAndDelete(id);
